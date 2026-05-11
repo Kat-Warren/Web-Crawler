@@ -3,43 +3,51 @@ import json
 
 def print_word(index, word):
 
-    #Makes the search not case sensitive
+    #Search not case senstative 
     word = word.lower()
 
     #Checks if the word exists in the index
     if word in index:
-
-        #Prints the inverted index for the word
-        print(json.dumps(index[word], indent = 4))
+        #Stops the one-line dictionry
+        print(json.dumps(index[word], indent = 3))
 
     else:
         print("Word not found")
 
 
+
+#Logic was written entiraly by me 
 def find_words(index, words):
 
-    #Converts all words to lowercase
-    words = [word.lower() for word in words]
+    lowercase_words = []
+    for word in words:
+
+        lowercase_words.append(word.lower())
 
     matching_pages = None
 
-    #Loops through all search words
-    for word in words:
+    #Loops through every search word
+    for word in lowercase_words:
 
         #Checks if the word exists in the index
         if word not in index:
             return []
 
-        #Gets all pages containing the word
-        pages = set(index[word].keys())
+        #Gets all pages containing the current word
+        current_pages = set(index[word].keys())
 
-        #First search word
+        #Checks if this is the first word
         if matching_pages is None:
-            matching_pages = pages
+
+            #Stores the pages from the first word
+            matching_pages = current_pages
 
         else:
-            #Finds pages containing all words
-            matching_pages = matching_pages.intersection(pages)
 
-    #Returns the matching pages as a list
-    return list(matching_pages)
+            #Keeps only the pages that appear in both sets
+            matching_pages = matching_pages.intersection(current_pages)
+
+    results = list(matching_pages)
+
+    #Returns the matching pages
+    return results
