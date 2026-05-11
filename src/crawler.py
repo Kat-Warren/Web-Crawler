@@ -6,8 +6,8 @@ from urllib.parse import urljoin, urldefrag
 
 URL = "https://quotes.toscrape.com/"
 
-
-def crawl(delay=6):
+#politness dely set at 6s
+def crawl(delay=0):
 
     to_visit = [URL]
     visited = set()
@@ -26,28 +26,40 @@ def crawl(delay=6):
         if current_URL in visited:
             continue
 
+        visited.add(current_URL)
+
         print(f"Crawling: {current_URL}")
 
-        #HTTP request
-        answer = requests.get(current_URL)
 
+    
         #Parse HTML
         #REFERENCE: Use of BeautifulSoup 
         #Crummy.com. (2020). Beautiful Soup Documentation — Beautiful Soup 4.14.3 documentation. [online] Available at: https://www.crummy.com/software/BeautifulSoup/bs4/doc/ [Accessed 07 May 2026]
+        #this also carries on if a page cannt be reached
+        try:
+            #The HTTP request
+            answer = requests.get(current_URL, timeout=10)
 
+            #Checks the page loaded correctly
+            if answer.status_code != 200:
+                print(f"Could not crawl: {current_URL}")
+                visited.add(current_URL)
+                continue
+
+        except requests.exceptions.RequestException:
+            print(f"Could not crawl: {current_URL}")
+            visited.add(current_URL)
+            continue
+
+        # Parse HTML
         soup = BeautifulSoup(answer.text, "html.parser")
-        page_text = soup.get_text(separator=" ")
+
+        text = soup.get_text(separator=" ", strip=True)
 
         pages.append({
             "url": current_URL,
-            "text": page_text
-        })
-
-        visited.add(current_URL)
-
-        #Finds all links on the current page
+            "text": text})
         links = soup.find_all("a")
-
 
         #REFERENCE: AI used to code how to avoid crawling already visited pages
         #https://chatgpt.com/share/6a0223a1-d4f8-8397-9e8b-a5dbd2d0488d

@@ -4,7 +4,7 @@ from search import find_words
 
 INDEX_FILE = "data/index.json"
 
-#REFERENCE: AI was used to code this GUI since no major logic was used it was mostly astetics 
+#REFERENCE: AI was used to code this GUI since no major logic was used it was mostly asthetics
 #https://chatgpt.com/share/6a022406-c408-838a-bf6b-df534ae9c02f
 
 

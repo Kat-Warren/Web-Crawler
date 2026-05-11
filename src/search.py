@@ -16,7 +16,7 @@ def print_word(index, word):
 
 
 
-#Logic was written entiraly by me 
+#Logic was developed by me
 def find_words(index, words):
 
     lowercase_words = []
